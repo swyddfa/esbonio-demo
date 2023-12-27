@@ -24,7 +24,7 @@ jobs:
         git -C demo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git -C demo config user.name "github-actions[bot]"
 
-        git -C demo add demo
+        git -C demo add .
         git -C demo commit -am "Sync demo content"
         git -C demo log -1
       name: Sync content
