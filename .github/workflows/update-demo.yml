@@ -21,8 +21,8 @@ jobs:
         set -eux
         rsync -av --delete --exclude=.git* esbonio/lib/esbonio/tests/workspaces/demo/ demo
 
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config user.name "github-actions[bot]"
+        git -C demo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git -C demo config user.name "github-actions[bot]"
 
         git -C demo add demo
         git -C demo commit -am "Sync demo content"
