@@ -1,0 +1,23 @@
+# Automatically pull changes to the demo site from the main 'esbonio' repo.
+name: 'Update Demo'
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: 'alcarney/esbonio'
+        ref: 'demo'
+        path: 'esbonio'
+
+    - uses: actions/checkout@v4
+      with:
+        path: 'demo'
+
+    - run: |
+        set -eux
+        rsync -anv --delete esbonio/lib/esbonio/tests/workspaces/demo/ demo
+      name: Sync content
