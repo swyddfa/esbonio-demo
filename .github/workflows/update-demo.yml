@@ -9,8 +9,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: 'alcarney/esbonio'
-        ref: 'demo'
+        repository: 'swyddfa/esbonio'
+        ref: 'develop'
         path: 'esbonio'
 
     - uses: actions/checkout@v4
