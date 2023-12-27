@@ -44,6 +44,6 @@ jobs:
         git push -u origin "sync-$(date +%Y-%d-%m)"
         gh pr create --base main --fill
       name: Open PR  
-      if: ${{steps.sync.outputs.changes}}
+      if: steps.sync.outputs.changes
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
