@@ -20,11 +20,25 @@ jobs:
     - run: |
         set -eux
         rsync -av --delete --exclude=.git* esbonio/lib/esbonio/tests/workspaces/demo/ demo
+        
+        cd demo
 
-        git -C demo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git -C demo config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
 
-        git -C demo add .
-        git -C demo commit -am "Sync demo content"
-        git -C demo log -1
-      name: Sync content
+        git checkout -b "sync-$(date +%Y-%d-%m)"
+        git add .
+        git commit -am "Sync demo content"
+        git log -1 --stat >> $GITHUB_STEP_SUMMARY
+
+      name: Sync content 
+    
+    - run: |
+        set -eux
+        cd demo
+        
+        git push -u origin "sync-$(date +%Y-%d-%m)"
+        gh pr create --base main --fill
+      name: Open PR  
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
