@@ -29,7 +29,11 @@ jobs:
         git checkout -b "sync-$(date +%Y-%d-%m)"
         git add .
         git commit -am "Sync demo content"
+
+        echo '```' >> $GITHUB_STEP_SUMMARY
         git log -1 --stat >> $GITHUB_STEP_SUMMARY
+        echo '' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
 
       name: Sync content 
     
