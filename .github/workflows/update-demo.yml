@@ -28,13 +28,13 @@ jobs:
 
         git checkout -b "sync-$(date +%Y-%d-%m)"
         git add .
-        git commit -am "Sync demo content"
+        (git commit -am "Sync demo content" && echo "changes=true" >> $GITHUB_OUTPUT) || echo "changes=false" >> $GITHUB_OUTPUT
 
         echo '```' >> $GITHUB_STEP_SUMMARY
         git log -1 --stat >> $GITHUB_STEP_SUMMARY
         echo '' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
-
+      id: sync
       name: Sync content 
     
     - run: |
@@ -44,5 +44,6 @@ jobs:
         git push -u origin "sync-$(date +%Y-%d-%m)"
         gh pr create --base main --fill
       name: Open PR  
+      if: ${{steps.sync.outputs.changes}}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
