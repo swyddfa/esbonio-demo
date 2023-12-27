@@ -19,5 +19,5 @@ jobs:
 
     - run: |
         set -eux
-        rsync -anv --delete esbonio/lib/esbonio/tests/workspaces/demo/ demo
+        rsync -anv --delete --exclude=.git* esbonio/lib/esbonio/tests/workspaces/demo/ demo
       name: Sync content
