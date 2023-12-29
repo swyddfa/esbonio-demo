@@ -3,7 +3,7 @@ name: 'Update Demo'
 on:
   workflow_dispatch:
   schedule:
-  - cron: '0 6 * * *'
+  - cron: '33 10 * * *'
 
 jobs:
   sync:
