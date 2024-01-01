@@ -1,0 +1,52 @@
+name: 'Update Requirements'
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'requirements.in'
+
+  pull_request:
+    branches:
+    - main
+    paths:
+    - 'requirements.in'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@5
+      with:
+        python-version: '3.12'
+
+    - run: |
+        set -eux
+        
+        pip install pip-tools
+        pip-compile
+
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+
+        git checkout -b "requirements-$(date +%Y-%d-%m)"
+        git add .
+        (git commit -am "Update requirements.txt" && echo "changes=yes" >> $GITHUB_OUTPUT) || echo "changes=no" >> $GITHUB_OUTPUT
+
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        git show >> $GITHUB_STEP_SUMMARY
+        echo '' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+      id: sync
+      name: Update requirements 
+    
+    - run: |
+        set -eux
+        
+        git push -u origin "requirements-$(date +%Y-%d-%m)"
+        gh pr create --base main --fill
+      name: Open PR  
+      if: steps.sync.outputs.changes == 'yes' && github.event_name != 'pull_request'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
