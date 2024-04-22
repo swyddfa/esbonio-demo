@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-alabaster==0.7.13
+alabaster==0.7.16
     # via sphinx
 babel==2.14.0
     # via sphinx
@@ -54,7 +54,7 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.2.6
+sphinx==7.3.7
     # via
     #   -r requirements.in
     #   furo
