@@ -68,7 +68,7 @@ sphinx==7.4.7
     #   sphinxcontrib-serializinghtml
 sphinx-basic-ng==1.0.0b2
     # via furo
-sphinx-design==0.6.0
+sphinx-design==0.6.1
     # via -r requirements.in
 sphinxcontrib-applehelp==1.0.7
     # via sphinx
