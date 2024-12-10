@@ -26,18 +26,30 @@ jobs:
 
     - run: |
         set -eux
+
+        cd demo
+
+        if [ $(gh pr list --json number | jq length) -gt 0 ]; then
+          gh pr checkout $(gh pr list --json number | jq '.[0].number')
+        else
+          git checkout -b "sync-$(date +%Y-%d-%m)"
+        fi
+
+      name: Setup branch
+
+    - run: |
+        set -eux
         rsync -av --delete \
               --exclude=.git* \
               --exclude=requirements.* \
               --exclude=.readthedocs.yaml \
               esbonio/lib/esbonio/tests/workspaces/demo/ demo
-        
+
         cd demo
 
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
 
-        git checkout -b "sync-$(date +%Y-%d-%m)"
         git add .
         (git commit -am "Sync demo content" && echo "changes=yes" >> $GITHUB_OUTPUT) || echo "changes=no" >> $GITHUB_OUTPUT
 
@@ -46,15 +58,19 @@ jobs:
         echo '' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
       id: sync
-      name: Sync content 
-    
+      name: Sync content
+
     - run: |
         set -eux
         cd demo
-        
-        git push -u origin "sync-$(date +%Y-%d-%m)"
-        gh pr create --base main --fill
-      name: Open PR  
+
+        git push -u origin $(git rev-parse --abbrev-ref HEAD)
+
+        if [ $(gh pr list --json number | jq length) -eq 0 ]; then
+          gh pr create --base main --fill
+        fi
+
+      name: Open/Update PR
       if: steps.sync.outputs.changes == 'yes' && github.event_name != 'pull_request'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
