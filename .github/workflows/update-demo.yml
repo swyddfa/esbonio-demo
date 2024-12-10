@@ -45,6 +45,7 @@ jobs:
               --exclude=.git* \
               --exclude=requirements.* \
               --exclude=.readthedocs.yaml \
+              --exclude=.devcontainer \
               esbonio/lib/esbonio/tests/workspaces/demo/ demo
 
         cd demo
