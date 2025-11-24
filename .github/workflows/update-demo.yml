@@ -14,13 +14,13 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         repository: 'swyddfa/esbonio'
         ref: 'develop'
         path: 'esbonio'
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         path: 'demo'
 
